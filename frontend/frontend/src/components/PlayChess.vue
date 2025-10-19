@@ -5,9 +5,9 @@
       <div class="timer-section top">
         <ChessTimer
           ref="blackTimer"
-          playerName=""
-          :initialTime="600"
-          :isActive="!gameState.whiteToMove && gameInProgress"
+          playerName="Black"
+          v-bind="timerConfig"
+          :isActive="blackTimerActive"
           @timer-expired="handleTimerExpired"
         />
       </div>
@@ -22,6 +22,7 @@
           :gameState="gameEndState"
           :winner="winner"
           @new-game="startNewGame"
+          @time-control-selected="handleTimeControlSelected"
         />
       </div>
 
@@ -29,9 +30,9 @@
       <div class="timer-section bottom">
         <ChessTimer
           ref="whiteTimer"
-          playerName=""
-          :initialTime="600"
-          :isActive="gameState.whiteToMove && gameInProgress"
+          playerName="White"
+          v-bind="timerConfig"
+          :isActive="whiteTimerActive"
           @timer-expired="handleTimerExpired"
         />
       </div>
@@ -43,12 +44,11 @@
 import ChessBoard from "./ChessBoard.vue";
 import ChessTimer from "./Timer.vue";
 import GameEndPopup from "./GameEndPopup.vue";
-
-/*
- * TODO - need to declare winner when time is up
- *     - redesign the colors for declared winner
- *     - new game popup goes to start game popup, should go straight to new game
- */
+import {
+  DEFAULT_TIME_CONTROL,
+  convertMinutesToSeconds,
+  determineWinner,
+} from "../utils/gameConfig.js";
 
 export default {
   name: "PlayChess",
@@ -64,6 +64,7 @@ export default {
       },
       gameEndState: "welcome",
       winner: null,
+      selectedTimeControl: DEFAULT_TIME_CONTROL,
     };
   },
   computed: {
@@ -76,10 +77,31 @@ export default {
     gameStarted() {
       return this.gameEndState !== "welcome";
     },
+    timerConfig() {
+      return {
+        initialTime: convertMinutesToSeconds(this.selectedTimeControl.minutes),
+        increment: this.selectedTimeControl.increment,
+      };
+    },
+    blackTimerActive() {
+      return !this.gameState.whiteToMove && this.gameInProgress;
+    },
+    whiteTimerActive() {
+      return this.gameState.whiteToMove && this.gameInProgress;
+    },
   },
   methods: {
     handleGameStateUpdate(newGameState) {
+      const previousWhiteToMove = this.gameState.whiteToMove;
       this.gameState = { ...newGameState };
+
+      // Add increment to the player who just made a move (if the turn changed)
+      if (
+        previousWhiteToMove !== newGameState.whiteToMove &&
+        this.gameInProgress
+      ) {
+        this.addIncrementToPlayer(previousWhiteToMove ? "White" : "Black");
+      }
 
       // Show popup when game ends (only if game has started)
       if (
@@ -92,15 +114,27 @@ export default {
       }
     },
 
+    addIncrementToPlayer(playerName) {
+      const timerRef = this.$refs[`${playerName.toLowerCase()}Timer`];
+      if (timerRef) {
+        timerRef.addIncrement();
+      }
+    },
+
     handleTimerExpired(playerName) {
       console.log(`${playerName}'s time is up!`);
       this.gameEndState = "time_expired";
       this.setWinner("time_expired", null, playerName);
     },
 
+    handleTimeControlSelected(timeControl) {
+      this.selectedTimeControl = timeControl;
+      this.gameEndState = null; // Start the game
+    },
+
     startNewGame() {
       if (this.gameEndState === "welcome") {
-        // Start the game
+        // This shouldn't happen anymore since time control selection starts the game
         this.gameEndState = null;
       } else {
         // Restart game
@@ -109,13 +143,11 @@ export default {
     },
 
     setWinner(gameEndState, whiteToMove, timerExpiredPlayer = null) {
-      if (gameEndState === "checkmate") {
-        this.winner = whiteToMove ? "Black" : "White";
-      } else if (gameEndState === "time_expired" && timerExpiredPlayer) {
-        this.winner = timerExpiredPlayer === "White" ? "Black" : "White";
-      } else {
-        this.winner = null; // Draw cases
-      }
+      this.winner = determineWinner(
+        gameEndState,
+        whiteToMove,
+        timerExpiredPlayer
+      );
     },
   },
 };

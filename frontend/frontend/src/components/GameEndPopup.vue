@@ -6,14 +6,47 @@
       </div>
 
       <div class="popup-content">
-        <div class="game-result-icon">{{ popupContent.icon }}</div>
-        <p class="result-message">{{ popupContent.message }}</p>
-        <div v-if="winner" class="winner-info">
-          <span>{{ winner }} wins!</span>
+        <div v-if="gameState === 'welcome'" class="time-control-grid">
+          <div class="game-result-icon">{{ popupContent.icon }}</div>
+          <p class="result-message">{{ popupContent.message }}</p>
+
+          <!-- Time Control Grid -->
+          <div class="time-categories">
+            <div
+              v-for="category in timeControlCategories"
+              :key="category.name"
+              class="time-category"
+            >
+              <h3 class="category-title">{{ category.name }}</h3>
+              <div class="time-options">
+                <button
+                  v-for="timeControl in category.options"
+                  :key="`${timeControl.minutes}-${timeControl.increment}`"
+                  class="time-button"
+                  @click="
+                    selectTimeControl(
+                      timeControl.minutes,
+                      timeControl.increment
+                    )
+                  "
+                >
+                  {{ timeControl.minutes }}|{{ timeControl.increment }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div v-else class="standard-content">
+          <div class="game-result-icon">{{ popupContent.icon }}</div>
+          <p class="result-message">{{ popupContent.message }}</p>
+          <div v-if="winner" class="winner-info">
+            <span>{{ winner }} wins!</span>
+          </div>
         </div>
       </div>
 
-      <div class="popup-actions">
+      <div v-if="gameState !== 'welcome'" class="popup-actions">
         <button class="btn btn-primary" @click="newGame">
           {{ buttonText }}
         </button>
@@ -23,6 +56,11 @@
 </template>
 
 <script>
+import {
+  TIME_CONTROL_CATEGORIES,
+  GAME_STATE_CONTENT,
+} from "../utils/gameConfig.js";
+
 export default {
   name: "GameEndPopup",
   props: {
@@ -39,47 +77,19 @@ export default {
       default: null,
     },
   },
+  data() {
+    return {
+      timeControlCategories: TIME_CONTROL_CATEGORIES,
+    };
+  },
   computed: {
     buttonText() {
       return this.gameState === "welcome" ? "Start Game" : "New Game";
     },
 
     popupContent() {
-      const content = {
-        welcome: {
-          title: "Welcome to Chess!",
-          icon: "♟️",
-          message: "Click Start Game to begin!",
-        },
-        checkmate: {
-          title: "Checkmate!",
-          icon: "🏆",
-          message: "The king has been checkmated!",
-        },
-        stalemate: {
-          title: "Draw!",
-          icon: "🤝",
-          message: "Draw due to stalemate",
-        },
-        "insufficient material": {
-          title: "Draw!",
-          icon: "⚖️",
-          message: "Draw due to insufficient material",
-        },
-        "three-fold repetition": {
-          title: "Draw!",
-          icon: "🔄",
-          message: "Draw due to three fold repetition",
-        },
-        time_expired: {
-          title: "Time's Up!",
-          icon: "⏰",
-          message: "Time has expired!",
-        },
-      };
-
       return (
-        content[this.gameState] || {
+        GAME_STATE_CONTENT[this.gameState] || {
           title: "Game Over!",
           icon: "⚖️",
           message: "The game has ended!",
@@ -90,6 +100,9 @@ export default {
   methods: {
     newGame() {
       this.$emit("new-game");
+    },
+    selectTimeControl(minutes, increment) {
+      this.$emit("time-control-selected", { minutes, increment });
     },
   },
 };
@@ -141,7 +154,75 @@ export default {
 }
 
 .game-result-icon {
-  font-size: 36px;
-  margin-bottom: 12px;
+  font-size: 20px;
+  margin-bottom: 2px;
+}
+
+/* Time Control Grid Styles */
+.time-control-grid {
+  text-align: center;
+}
+
+.time-control-grid .result-message {
+  margin-bottom: 4px;
+}
+
+.time-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.time-category {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.category-title {
+  color: #ecf0f1;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0;
+  text-align: center;
+}
+
+.time-options {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.time-button {
+  background: #34495e;
+  border: 2px solid #4a6741;
+  color: #ecf0f1;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 45px;
+  font-family: "Courier New", monospace;
+}
+
+.time-button:hover {
+  background: #4a6741;
+  border-color: #5d8a52;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 103, 65, 0.3);
+}
+
+.time-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(74, 103, 65, 0.3);
+}
+
+.standard-content {
+  text-align: center;
 }
 </style>
