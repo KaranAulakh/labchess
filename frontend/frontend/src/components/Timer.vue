@@ -22,6 +22,10 @@ export default {
       type: Number,
       default: 600,
     },
+    increment: {
+      type: Number,
+      default: 0,
+    },
     isActive: {
       type: Boolean,
       default: false,
@@ -54,6 +58,21 @@ export default {
   },
   beforeUnmount() {
     if (this.intervalId) clearInterval(this.intervalId);
+  },
+  methods: {
+    addIncrement() {
+      if (this.increment > 0) {
+        this.timeRemaining += this.increment;
+      }
+    },
+  },
+  watch: {
+    initialTime: {
+      handler(newTime) {
+        this.timeRemaining = newTime;
+      },
+      immediate: true,
+    },
   },
 };
 </script>
