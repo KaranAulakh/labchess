@@ -115,10 +115,14 @@ export default {
     },
 
     addIncrementToPlayer(playerName) {
-      const timerRef = this.$refs[`${playerName.toLowerCase()}Timer`];
+      const timerRef = this.getTimerRef(playerName);
       if (timerRef) {
         timerRef.addIncrement();
       }
+    },
+
+    getTimerRef(playerName) {
+      return this.$refs[`${playerName.toLowerCase()}Timer`];
     },
 
     handleTimerExpired(playerName) {
