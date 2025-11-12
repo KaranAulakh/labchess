@@ -1,17 +1,35 @@
 import logging 
+import secrets
 from typing import Union, Dict, Any, List
-from flask import Flask, jsonify, Response
+from flask import Flask, jsonify, Response, session
 from flask_cors import CORS
 
 from gameplay.gameState import GameState
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-gameState = GameState()
+app.secret_key = secrets.token_hex(16)  # Secret key for session management
 logger = logging.getLogger(__name__)
 
+# Dictionary to store game states per session
+game_states: Dict[str, GameState] = {}
+
+def get_or_create_game_state() -> GameState:
+    """Get or create a game state for the current session"""
+    session_id = session.get('session_id')
+    if not session_id:
+        session_id = secrets.token_hex(8)
+        session['session_id'] = session_id
+        logger.info(f"Created new session: {session_id}")
+    
+    if session_id not in game_states:
+        game_states[session_id] = GameState()
+        logger.info(f"Created new game state for session: {session_id}")
+    
+    return game_states[session_id]
+
 # todo - make CORS restrictions tighter
-CORS(app, resources={r"/*":{'origins': '*'}})
+CORS(app, resources={r"/*":{'origins': '*'}}, supports_credentials=True)
 
 # todo - create a valuable home page
 @app.route('/', methods=['GET'])
@@ -22,23 +40,32 @@ def test() -> str:
 def play() -> str:
   return ("Let's play chess")
 
-@app.route('/get-start-positions')
-def get_start_position() -> Response:
-    return jsonify(gameState.get_start_position())
+@app.route('/new-game', methods=['POST'])
+def new_game() -> Response:
+    """Create a new game or reset the current game and return start positions"""
+    try:
+        game_state = get_or_create_game_state()
+        game_state.reset_game()
+        logger.info(f"Game reset for session: {session.get('session_id')}")
+        return jsonify(game_state.get_serialized_piece_positions())
+    except Exception as e:
+        logger.error(f"Error creating new game: {str(e)}")
+        return jsonify({"error": "Failed to create new game"}), 500
 
 @app.route('/get-possible-moves')
 def get_possible_moves() -> Union[Response, tuple[Response, int]]:
     from flask import request
+    game_state = get_or_create_game_state()
     square = request.args.get('square')
     if not square:
         return jsonify({"error": "Square parameter is required"}), 400
     
     # Check if there's a piece at this square
-    if square not in gameState.piece_positions:
+    if square not in game_state.piece_positions:
         return jsonify({"error": "Square must contain a piece upon it"}), 400
     
     try: 
-        return jsonify(gameState.get_legal_moves(square))
+        return jsonify(game_state.get_legal_moves(square))
     except Exception as e: 
         logger.error(f"error getting start positions: {str(e)}")
         return jsonify({"error": "failed to get start positions"}), 500
@@ -46,6 +73,7 @@ def get_possible_moves() -> Union[Response, tuple[Response, int]]:
 @app.route('/make-move', methods=['POST'])
 def make_move() -> Union[Response, tuple[Response, int]]:
     from flask import request
+    game_state = get_or_create_game_state()
     data = request.json
     start_square = data.get('start')
     end_square = data.get('end')
@@ -54,7 +82,7 @@ def make_move() -> Union[Response, tuple[Response, int]]:
         return jsonify({"error": "Both start and end squares are required"}), 400
     
     try:
-        return jsonify(gameState.move(start_square, end_square))
+        return jsonify(game_state.move(start_square, end_square))
     except Exception as e:
         logger.error(f"error making a move: {str(e)}")
         return jsonify({"error": "failed to make a move"}), 500
@@ -62,11 +90,12 @@ def make_move() -> Union[Response, tuple[Response, int]]:
 @app.route('/get-piece-positions')
 def get_piece_positions() -> Response:
     from flask import request
+    game_state = get_or_create_game_state()
     move = request.args.get('move')
 
     try: 
-        return jsonify(gameState.get_piece_positions)
-    except:
+        return jsonify(game_state.get_piece_positions)
+    except Exception as e:
         logger.error(f"error getting piece positions: {str(e)}")
         return jsonify({"error": "failed to get piece positions"}), 500
 

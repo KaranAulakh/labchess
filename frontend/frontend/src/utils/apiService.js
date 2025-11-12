@@ -5,6 +5,7 @@ import axios from "axios";
 const API_BASE_URL = "http://localhost:5001";
 const api = axios.create({
   baseURL: API_BASE_URL,
+  withCredentials: true, // Important for session cookies
 });
 
 // Intercept the response to handle errors and API formatting
@@ -30,4 +31,9 @@ const apiServiceGET = (path) => {
   return api.get(path);
 };
 
-export { apiServiceGET };
+// Handle Post Calls from the api
+const apiServicePOST = (path, data = {}) => {
+  return api.post(path, data);
+};
+
+export { apiServiceGET, apiServicePOST };

@@ -14,7 +14,10 @@
 
       <!-- Chess Board with Popup Container -->
       <div class="board-container">
-        <ChessBoard @game-state-updated="handleGameStateUpdate" />
+        <ChessBoard
+          ref="chessBoard"
+          @game-state-updated="handleGameStateUpdate"
+        />
 
         <!-- Game End Popup positioned over chess board -->
         <GameEndPopup
@@ -133,15 +136,47 @@ export default {
 
     handleTimeControlSelected(timeControl) {
       this.selectedTimeControl = timeControl;
-      this.gameEndState = null; // Start the game
+      this.startNewGameWithTimeControl();
     },
 
     startNewGame() {
-      if (this.gameEndState === "welcome") {
-        // This shouldn't happen anymore since time control selection starts the game
-        this.gameEndState = null;
+      // Always show the time control selector when starting a new game
+      this.gameEndState = "welcome";
+      this.winner = null;
+      this.gameState = {
+        whiteToMove: true,
+      };
+    },
+
+    async startNewGameWithTimeControl() {
+      // Get reference to ChessBoard component using ref
+      const chessBoard = this.$refs.chessBoard;
+
+      if (chessBoard && chessBoard.startNewGame) {
+        const success = await chessBoard.startNewGame();
+        if (success) {
+          // Reset local state and start the game
+          this.gameEndState = null; // null means game is in progress
+          this.winner = null;
+          this.gameState = {
+            whiteToMove: true,
+          };
+
+          // Reset timers
+          if (this.$refs.whiteTimer) {
+            this.$refs.whiteTimer.reset();
+          }
+          if (this.$refs.blackTimer) {
+            this.$refs.blackTimer.reset();
+          }
+
+          console.log("Game successfully started with new time control!");
+        } else {
+          console.error("Failed to start game, falling back to page reload");
+          window.location.reload();
+        }
       } else {
-        // Restart game
+        // Fallback to page reload if something goes wrong
         window.location.reload();
       }
     },

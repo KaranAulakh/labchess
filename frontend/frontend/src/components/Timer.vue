@@ -65,6 +65,9 @@ export default {
         this.timeRemaining += this.increment;
       }
     },
+    reset() {
+      this.timeRemaining = this.initialTime;
+    },
   },
   watch: {
     initialTime: {
