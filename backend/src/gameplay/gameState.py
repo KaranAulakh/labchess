@@ -20,6 +20,16 @@ class GameState:
         self.en_passant_positions: Optional[Tuple[str, str]] = None
         self.board_state_counts: Dict[tuple, int] = {}
 
+    def reset_game(self) -> None:
+        """Completely reset the game state for a new game"""
+        self.piece_positions = self.get_start_piece_position()
+        self.possible_castles = {}
+        self.possible_moves = []
+        self.black_king_position = self.INITIAL_BLACK_KING_POSITION
+        self.white_king_position = self.INITIAL_WHITE_KING_POSITION
+        self.en_passant_positions = None
+        self.board_state_counts = {}  # Clear the repetition counter - fixes the three-fold repetition bug!
+
     def get_piece_positions(self, isStart: bool) -> Dict[str, str]:
         if isStart:
             return get_start_position
@@ -225,7 +235,7 @@ class GameState:
         
     ''' Set/Reset the board to the starting position '''
     def get_start_position(self) -> Dict[str, str]:
-        self.piece_positions = self.get_start_piece_position()
+        self.reset_game()  # Use comprehensive reset instead of just resetting piece_positions
         return self.get_serialized_piece_positions()
     
     ''' Define the intial piece positions on the board '''

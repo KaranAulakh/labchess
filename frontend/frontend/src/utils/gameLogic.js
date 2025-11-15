@@ -1,4 +1,4 @@
-import { apiServiceGET } from "@/utils/apiService";
+import { apiServiceGET, apiServicePOST } from "@/utils/apiService";
 
 export const gameLogic = {
   data() {
@@ -19,13 +19,40 @@ export const gameLogic = {
       }
       return res;
     },
-    async fetchPiecePositions(move) {
-      const response =
-        move === "start"
-          ? await this.getResponse("/get-start-positions")
-          : await this.getResponse(`/get-piece-positions?move=${move}`);
+    async postResponse(path, data = {}) {
+      const res = await apiServicePOST(path, data);
+      if (!res?.success) {
+        console.error(res.errorMsg);
+      }
+      return res;
+    },
+    async startNewGame() {
+      const response = await this.postResponse("/new-game");
       if (response?.success) {
+        // Reset local game state
         this.position = response.data;
+        this.selectedSquare = null;
+        this.possibleMoves = [];
+        this.whiteToMove = true;
+        this.gameState = null;
+        this.gameEnded = false;
+        return true;
+      } else {
+        console.error("Failed to start new game");
+        return false;
+      }
+    },
+    async fetchPiecePositions(move) {
+      if (move === "start") {
+        // Use startNewGame for initial setup
+        await this.startNewGame();
+      } else {
+        const response = await this.getResponse(
+          `/get-piece-positions?move=${move}`
+        );
+        if (response?.success) {
+          this.position = response.data;
+        }
       }
     },
     async fetchPossibleMoves(square) {
@@ -39,22 +66,13 @@ export const gameLogic = {
       }
     },
     async makeMove(startSquare, endSquare) {
-      const response = await fetch(
-        `${this.$apiBaseUrl || "http://localhost:5001"}/make-move`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            start: startSquare,
-            end: endSquare,
-          }),
-        }
-      );
+      const response = await this.postResponse("/make-move", {
+        start: startSquare,
+        end: endSquare,
+      });
 
-      if (response.ok) {
-        const result = await response.json();
+      if (response?.success) {
+        const result = response.data;
         this.position = result.piecePositions;
         this.whiteToMove = !this.whiteToMove;
 
