@@ -99,5 +99,25 @@ def get_piece_positions() -> Response:
         logger.error(f"error getting piece positions: {str(e)}")
         return jsonify({"error": "failed to get piece positions"}), 500
 
+@app.route('/promote-pawn', methods=['POST'])
+def promote_pawn() -> Union[Response, tuple[Response, int]]:
+    from flask import request
+    game_state = get_or_create_game_state()
+    data = request.json
+    pawn_location = data.get('pawnLocation')
+    promote_to = data.get('promoteTo')
+    
+    if not pawn_location or not promote_to:
+        return jsonify({"error": "Both pawnLocation and promoteTo are required"}), 400
+    
+    if promote_to not in ["Queen", "Rook", "Bishop", "Knight"]:
+        return jsonify({"error": "Invalid promotion piece type"}), 400
+    
+    try:
+        return jsonify(game_state.promote_pawn(pawn_location, promote_to))
+    except Exception as e:
+        logger.error(f"error promoting pawn: {str(e)}")
+        return jsonify({"error": "failed to promote pawn"}), 500
+
 if __name__ == "__main__":
   app.run(debug=True, port=5001)

@@ -1,30 +1,46 @@
 <template>
-  <div class="chessboard">
-    <div
-      v-for="square in boardSquares"
-      :key="square.id"
-      :class="getSquareClasses(square)"
-      @click="handleSquareClick(square)"
-    >
-      <img
-        v-if="square.piece"
-        :src="images[square.piece]?.src"
-        class="piece-image"
-        :alt="square.piece"
-      />
+  <div class="board-wrapper">
+    <div class="chessboard">
+      <div
+        v-for="square in boardSquares"
+        :key="square.id"
+        :class="getSquareClasses(square)"
+        @click="handleSquareClick(square)"
+      >
+        <img
+          v-if="square.piece"
+          :src="images[square.piece]?.src"
+          class="piece-image"
+          :alt="square.piece"
+        />
+      </div>
     </div>
+
+    <!-- Pawn Promotion Popup -->
+    <PawnPromotionPopup
+      :visible="showPromotionPopup"
+      :isWhite="promotingPawnIsWhite"
+      @piece-selected="handlePieceSelected"
+    />
   </div>
 </template>
 
 <script>
 import { gameLogic } from "@/utils/gameLogic.js";
+import PawnPromotionPopup from "./PawnPromotionPopup.vue";
 
 export default {
   name: "ChessBoard",
+  components: {
+    PawnPromotionPopup,
+  },
   mixins: [gameLogic],
   data() {
     return {
       images: {},
+      showPromotionPopup: false,
+      promotingPawnLocation: null,
+      promotingPawnIsWhite: true,
     };
   },
   computed: {
@@ -87,10 +103,15 @@ export default {
 
     // Handle square clicks
     async handleSquareClick(square) {
+      // Don't allow moves while promotion popup is shown
+      if (this.showPromotionPopup) {
+        return;
+      }
+
       const clickedSquare = square.id;
       const pieceAtSquare = this.position[clickedSquare];
 
-      // Make a move ff we have a piece selected and click on a valid move
+      // Make a move if we have a piece selected and click on a valid move
       if (this.selectedSquare && this.possibleMoves.includes(clickedSquare)) {
         const moveResult = await this.makeMove(
           this.selectedSquare,
@@ -99,7 +120,16 @@ export default {
         if (moveResult) {
           this.possibleMoves = [];
           this.selectedSquare = null;
-          this.emitGameState();
+
+          // Check if pawn promotion is needed
+          if (moveResult.pawnCanPromote) {
+            this.showPromotionPopup = true;
+            this.promotingPawnLocation = moveResult.pawnCanPromote;
+            this.promotingPawnIsWhite =
+              this.position[moveResult.pawnCanPromote].includes("White");
+          } else {
+            this.emitGameState();
+          }
         }
       }
       // Show possible moves if the clicked square has a piece that belongs to the team whose turn it is
@@ -110,10 +140,27 @@ export default {
         await this.fetchPossibleMoves(clickedSquare);
         this.selectedSquare = clickedSquare;
       }
-      // Clear the selection ff this is not a valid spot to click
+      // Clear the selection if this is not a valid spot to click
       else {
         this.possibleMoves = [];
         this.selectedSquare = null;
+      }
+    },
+
+    async handlePieceSelected(pieceType) {
+      // Promote the pawn
+      const success = await this.promotePawn(
+        this.promotingPawnLocation,
+        pieceType
+      );
+
+      if (success) {
+        // Close the popup
+        this.showPromotionPopup = false;
+        this.promotingPawnLocation = null;
+
+        // Emit game state after promotion
+        this.emitGameState();
       }
     },
 
@@ -156,6 +203,11 @@ export default {
 </script>
 
 <style scoped>
+.board-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
 .chessboard {
   display: grid;
   grid-template-columns: repeat(8, 64px);
