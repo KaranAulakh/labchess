@@ -18,7 +18,8 @@
         <div v-if="showPromotionPopup" class="promotion-popup-wrapper">
           <PawnPromotionPopup
             :visible="showPromotionPopup"
-            :isWhite="promotingPawnIsWhite"
+            :isWhite="promotionInfo.isWhite"
+            :location="promotionInfo.location"
             @piece-selected="handlePieceSelected"
           />
         </div>
@@ -80,14 +81,15 @@ export default {
       gameEndState: "welcome",
       winner: null,
       selectedTimeControl: DEFAULT_TIME_CONTROL,
-      showPromotionPopup: false,
-      promotingPawnLocation: null,
-      promotingPawnIsWhite: true,
+      promotionInfo: null, // Store all promotion info from ChessBoard
     };
   },
   computed: {
     showPopup() {
       return this.gameEndState !== null; // Show popup when not actively playing
+    },
+    showPromotionPopup() {
+      return this.promotionInfo !== null;
     },
     gameInProgress() {
       return this.gameEndState === null;
@@ -132,27 +134,21 @@ export default {
       }
     },
 
-    handlePromotionNeeded({ location, isWhite }) {
-      this.showPromotionPopup = true;
-      this.promotingPawnLocation = location;
-      this.promotingPawnIsWhite = isWhite;
+    handlePromotionNeeded(promotionInfo) {
+      this.promotionInfo = promotionInfo; // Just store the info from ChessBoard
     },
 
-    async handlePieceSelected(pieceType) {
+    async handlePieceSelected({ location, pieceType }) {
       // Get reference to ChessBoard component
       const chessBoard = this.$refs.chessBoard;
 
       if (chessBoard && chessBoard.promotePawn) {
         // Promote the pawn
-        const success = await chessBoard.promotePawn(
-          this.promotingPawnLocation,
-          pieceType
-        );
+        const success = await chessBoard.promotePawn(location, pieceType);
 
         if (success) {
           // Close the popup
-          this.showPromotionPopup = false;
-          this.promotingPawnLocation = null;
+          this.promotionInfo = null;
 
           // Emit game state after promotion
           chessBoard.emitGameState();

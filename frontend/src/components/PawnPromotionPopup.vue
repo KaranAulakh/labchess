@@ -26,6 +26,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    location: {
+      type: String,
+      required: true,
+    },
   },
   emits: ["piece-selected"],
   computed: {
@@ -53,7 +57,10 @@ export default {
   },
   methods: {
     selectPiece(pieceType) {
-      this.$emit("piece-selected", pieceType);
+      this.$emit("piece-selected", {
+        location: this.location,
+        pieceType: pieceType,
+      });
     },
   },
 };
