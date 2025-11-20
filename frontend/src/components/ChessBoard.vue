@@ -15,32 +15,18 @@
         />
       </div>
     </div>
-
-    <!-- Pawn Promotion Popup -->
-    <PawnPromotionPopup
-      :visible="showPromotionPopup"
-      :isWhite="promotingPawnIsWhite"
-      @piece-selected="handlePieceSelected"
-    />
   </div>
 </template>
 
 <script>
 import { gameLogic } from "@/utils/gameLogic.js";
-import PawnPromotionPopup from "./PawnPromotionPopup.vue";
 
 export default {
   name: "ChessBoard",
-  components: {
-    PawnPromotionPopup,
-  },
   mixins: [gameLogic],
   data() {
     return {
       images: {},
-      showPromotionPopup: false,
-      promotingPawnLocation: null,
-      promotingPawnIsWhite: true,
     };
   },
   computed: {
@@ -103,11 +89,6 @@ export default {
 
     // Handle square clicks
     async handleSquareClick(square) {
-      // Don't allow moves while promotion popup is shown
-      if (this.showPromotionPopup) {
-        return;
-      }
-
       const clickedSquare = square.id;
       const pieceAtSquare = this.position[clickedSquare];
 
@@ -123,10 +104,12 @@ export default {
 
           // Check if pawn promotion is needed
           if (moveResult.pawnCanPromote) {
-            this.showPromotionPopup = true;
-            this.promotingPawnLocation = moveResult.pawnCanPromote;
-            this.promotingPawnIsWhite =
+            const promotingPawnIsWhite =
               this.position[moveResult.pawnCanPromote].includes("White");
+            this.$emit("promotion-needed", {
+              location: moveResult.pawnCanPromote,
+              isWhite: promotingPawnIsWhite,
+            });
           } else {
             this.emitGameState();
           }
@@ -144,23 +127,6 @@ export default {
       else {
         this.possibleMoves = [];
         this.selectedSquare = null;
-      }
-    },
-
-    async handlePieceSelected(pieceType) {
-      // Promote the pawn
-      const success = await this.promotePawn(
-        this.promotingPawnLocation,
-        pieceType
-      );
-
-      if (success) {
-        // Close the popup
-        this.showPromotionPopup = false;
-        this.promotingPawnLocation = null;
-
-        // Emit game state after promotion
-        this.emitGameState();
       }
     },
 
