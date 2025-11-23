@@ -1,5 +1,6 @@
 import logging 
 import secrets
+import os
 from typing import Union, Dict, Any, List
 from flask import Flask, jsonify, Response, session
 from flask_cors import CORS
@@ -9,6 +10,22 @@ from gameplay.gameState import GameState
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = secrets.token_hex(16)  # Secret key for session management
+
+# Configure session cookies for cross-domain support
+# In production (HTTPS), use SameSite=None with Secure flag
+# In local development (HTTP), use Lax mode
+is_production = os.environ.get('RAILWAY_ENVIRONMENT') is not None
+if is_production:
+    app.config['SESSION_COOKIE_SAMESITE'] = 'None'
+    app.config['SESSION_COOKIE_SECURE'] = True
+    logger.info("Running in PRODUCTION mode with cross-domain cookies enabled")
+else:
+    app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+    app.config['SESSION_COOKIE_SECURE'] = False
+    logger.info("Running in LOCAL mode with relaxed cookie settings")
+
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+
 logger = logging.getLogger(__name__)
 
 # Dictionary to store game states per session
@@ -29,7 +46,7 @@ def get_or_create_game_state() -> GameState:
     return game_states[session_id]
 
 CORS(app, resources={r"/*":{'origins': [
-    'http://localhost:8080',
+    'http://localhost:8081',
     'https://labchess.com',
     'https://www.labchess.com'
 ]}}, supports_credentials=True)
@@ -124,5 +141,5 @@ def promote_pawn() -> Union[Response, tuple[Response, int]]:
 
 if __name__ == "__main__":
   import os
-  port = int(os.environ.get("PORT", 5000))
+  port = int(os.environ.get("PORT", 5001))
   app.run(host="0.0.0.0", port=port, debug=False)
