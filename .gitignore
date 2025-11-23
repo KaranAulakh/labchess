@@ -1,21 +1,17 @@
-.DS_Store
-node_modules
-
 # backend files
 backend/.dockerignore
 __pycache__/
 
 # frontend files
-frontend/babel.config.js
 frontend/dist
-frontend/jsconfig.json
-frontend/package-lock.json
+frontend/.env
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+frontend/.env.production
+frontend/.env.development
+frontend/node_modules
 frontend/public
-frontend/vue.config.js
-
-# local env files
-.env.local
-.env.*.local
 
 # Editor directories and files
 .idea
@@ -25,3 +21,4 @@ frontend/vue.config.js
 *.njsproj
 *.sln
 *.sw?
+.DS_Store
