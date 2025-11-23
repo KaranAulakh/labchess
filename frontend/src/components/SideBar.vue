@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <h1>Chess Lab</h1>
+    <h1>Lab Chess</h1>
     <ul>
       <li @click="navigateTo('/')">
         <icon-images name="home"></icon-images>

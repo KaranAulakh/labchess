@@ -10,7 +10,6 @@ frontend/babel.config.js
 frontend/dist
 frontend/jsconfig.json
 frontend/package-lock.json
-frontend/package.json
 frontend/public
 frontend/vue.config.js
 
