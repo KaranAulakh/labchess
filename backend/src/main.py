@@ -28,8 +28,11 @@ def get_or_create_game_state() -> GameState:
     
     return game_states[session_id]
 
-# todo - make CORS restrictions tighter
-CORS(app, resources={r"/*":{'origins': '*'}}, supports_credentials=True)
+CORS(app, resources={r"/*":{'origins': [
+    'http://localhost:8080',
+    'https://labchess.com',
+    'https://www.labchess.com'
+]}}, supports_credentials=True)
 
 # todo - create a valuable home page
 @app.route('/', methods=['GET'])

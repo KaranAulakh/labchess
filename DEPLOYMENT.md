@@ -23,6 +23,24 @@ curl -X POST http://localhost:5001/new-game
 
 ```bash
 # Replace with your actual Railway URL
-curl https://your-app-name.up.railway.app/
-curl -X POST https://your-app-name.up.railway.app/new-game
+curl https://labchess.up.railway.app/
+curl -X POST https://labchess.railway.app/new-game
 ```
+
+---
+
+# Frontend Deployment
+
+### Testing changes locally
+
+```bash
+# Test production build
+npm run build
+npx serve -s dist -l 3000
+# Visit http://localhost:3000
+```
+
+### Pushing changes
+- Simply push changes, Vercel auto-deploys
+- https://vercel.com/dashboard (takes 1-2 minutes to redeploy)
+- Live at: https://labchess.com and https://www.labchess.com
