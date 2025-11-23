@@ -93,5 +93,19 @@ export const gameLogic = {
         return null;
       }
     },
+    async promotePawn(pawnLocation, promoteTo) {
+      const response = await this.postResponse("/promote-pawn", {
+        pawnLocation,
+        promoteTo,
+      });
+
+      if (response?.success) {
+        this.position = response.data;
+        return true;
+      } else {
+        console.error("Failed to promote pawn");
+        return false;
+      }
+    },
   },
 };

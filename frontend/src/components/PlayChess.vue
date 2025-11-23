@@ -14,9 +14,20 @@
 
       <!-- Chess Board with Popup Container -->
       <div class="board-container">
+        <!-- Pawn Promotion Popup -->
+        <div v-if="showPromotionPopup" class="promotion-popup-wrapper">
+          <PawnPromotionPopup
+            :visible="showPromotionPopup"
+            :isWhite="promotionInfo.isWhite"
+            :location="promotionInfo.location"
+            @piece-selected="handlePieceSelected"
+          />
+        </div>
+
         <ChessBoard
           ref="chessBoard"
           @game-state-updated="handleGameStateUpdate"
+          @promotion-needed="handlePromotionNeeded"
         />
 
         <!-- Game End Popup positioned over chess board -->
@@ -47,6 +58,7 @@
 import ChessBoard from "./ChessBoard.vue";
 import ChessTimer from "./Timer.vue";
 import GameEndPopup from "./GameEndPopup.vue";
+import PawnPromotionPopup from "./PawnPromotionPopup.vue";
 import {
   DEFAULT_TIME_CONTROL,
   convertMinutesToSeconds,
@@ -59,6 +71,7 @@ export default {
     ChessBoard,
     ChessTimer,
     GameEndPopup,
+    PawnPromotionPopup,
   },
   data() {
     return {
@@ -68,11 +81,15 @@ export default {
       gameEndState: "welcome",
       winner: null,
       selectedTimeControl: DEFAULT_TIME_CONTROL,
+      promotionInfo: null, // Store all promotion info from ChessBoard
     };
   },
   computed: {
     showPopup() {
       return this.gameEndState !== null; // Show popup when not actively playing
+    },
+    showPromotionPopup() {
+      return this.promotionInfo !== null;
     },
     gameInProgress() {
       return this.gameEndState === null;
@@ -114,6 +131,28 @@ export default {
       ) {
         this.gameEndState = newGameState.gameState;
         this.setWinner(newGameState.gameState, newGameState.whiteToMove);
+      }
+    },
+
+    handlePromotionNeeded(promotionInfo) {
+      this.promotionInfo = promotionInfo; // Just store the info from ChessBoard
+    },
+
+    async handlePieceSelected({ location, pieceType }) {
+      // Get reference to ChessBoard component
+      const chessBoard = this.$refs.chessBoard;
+
+      if (chessBoard && chessBoard.promotePawn) {
+        // Promote the pawn
+        const success = await chessBoard.promotePawn(location, pieceType);
+
+        if (success) {
+          // Close the popup
+          this.promotionInfo = null;
+
+          // Emit game state after promotion
+          chessBoard.emitGameState();
+        }
       }
     },
 
@@ -219,5 +258,15 @@ export default {
   width: 512px; /* Same width as chessboard (8 * 64px) */
   padding-right: 0;
   margin: 0;
+}
+
+.promotion-popup-wrapper {
+  position: absolute;
+  top: -85px; /* Position above the board */
+  left: 0;
+  width: 512px; /* Same width as chessboard */
+  display: flex;
+  justify-content: center; /* Center the popup */
+  z-index: 100;
 }
 </style>
