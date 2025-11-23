@@ -10,6 +10,7 @@ from gameplay.gameState import GameState
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.secret_key = secrets.token_hex(16)  # Secret key for session management
+logger = logging.getLogger(__name__)
 
 # Configure session cookies for cross-domain support
 # In production (HTTPS), use SameSite=None with Secure flag
@@ -25,8 +26,6 @@ else:
     logger.info("Running in LOCAL mode with relaxed cookie settings")
 
 app.config['SESSION_COOKIE_HTTPONLY'] = True
-
-logger = logging.getLogger(__name__)
 
 # Dictionary to store game states per session
 game_states: Dict[str, GameState] = {}
