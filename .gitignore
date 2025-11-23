@@ -1,5 +1,8 @@
 .DS_Store
 node_modules
+
+# backend files
+backend/.dockerignore
 __pycache__/
 
 # frontend files
