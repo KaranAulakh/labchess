@@ -95,4 +95,14 @@ export default {
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
   }
 }
+
+/* Mobile responsive sizing */
+@media (max-width: 768px) {
+  .timer-display {
+    font-size: 18px;
+  }
+  .player-label {
+    font-size: 12px;
+  }
+}
 </style>

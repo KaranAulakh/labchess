@@ -203,4 +203,9 @@ span {
   .feature-list li {
     font-size: 1rem;
   }
+
+  .timer-base {
+    padding: 8px 12px;
+    min-width: 90px;
+  }
 }
