@@ -1,11 +1,9 @@
 // src/services/apiService.js
 import axios from "axios";
 
-// Detect API base URL based on environment
-const hostname = window.location.hostname;
-const API_BASE_URL = (hostname === 'localhost' || hostname === '127.0.0.1')
-  ? 'http://localhost:5001'
-  : 'https://labchess.up.railway.app';
+// Vercel has a Enviornment variable called VUE_APP_API_BASE_URL that is set to the API base URL
+const API_BASE_URL =
+  process.env.VUE_APP_API_BASE_URL || "http://localhost:5001";
 
 const api = axios.create({
   baseURL: API_BASE_URL,

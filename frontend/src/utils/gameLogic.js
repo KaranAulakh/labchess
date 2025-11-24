@@ -54,7 +54,7 @@ export const gameLogic = {
           console.error("No game_id available");
           return;
         }
-        
+
         const response = await this.getResponse(
           `/get-piece-positions?game_id=${this.game_id}&move=${move}`
         );
@@ -69,7 +69,7 @@ export const gameLogic = {
         this.possibleMoves = [];
         return;
       }
-      
+
       const response = await this.getResponse(
         `/get-possible-moves?game_id=${this.game_id}&square=${square}`
       );
@@ -84,7 +84,7 @@ export const gameLogic = {
         console.error("No game_id available");
         return null;
       }
-      
+
       const response = await this.postResponse("/make-move", {
         game_id: this.game_id,
         start: startSquare,
@@ -118,7 +118,7 @@ export const gameLogic = {
         console.error("No game_id available");
         return false;
       }
-      
+
       const response = await this.postResponse("/promote-pawn", {
         game_id: this.game_id,
         pawnLocation,
