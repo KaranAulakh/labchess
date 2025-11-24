@@ -3,6 +3,7 @@ import { apiServiceGET, apiServicePOST } from "@/utils/apiService";
 export const gameLogic = {
   data() {
     return {
+      game_id: null,
       position: {},
       selectedSquare: null,
       possibleMoves: [],
@@ -29,8 +30,10 @@ export const gameLogic = {
     async startNewGame() {
       const response = await this.postResponse("/new-game");
       if (response?.success) {
+        // Store the game_id from the response
+        this.game_id = response.data.game_id;
         // Reset local game state
-        this.position = response.data;
+        this.position = response.data.piece_positions;
         this.selectedSquare = null;
         this.possibleMoves = [];
         this.whiteToMove = true;
@@ -47,8 +50,13 @@ export const gameLogic = {
         // Use startNewGame for initial setup
         await this.startNewGame();
       } else {
+        if (!this.game_id) {
+          console.error("No game_id available");
+          return;
+        }
+        
         const response = await this.getResponse(
-          `/get-piece-positions?move=${move}`
+          `/get-piece-positions?game_id=${this.game_id}&move=${move}`
         );
         if (response?.success) {
           this.position = response.data;
@@ -56,8 +64,14 @@ export const gameLogic = {
       }
     },
     async fetchPossibleMoves(square) {
+      if (!this.game_id) {
+        console.error("No game_id available");
+        this.possibleMoves = [];
+        return;
+      }
+      
       const response = await this.getResponse(
-        `/get-possible-moves?square=${square}`
+        `/get-possible-moves?game_id=${this.game_id}&square=${square}`
       );
       if (response?.success) {
         this.possibleMoves = response.data;
@@ -66,7 +80,13 @@ export const gameLogic = {
       }
     },
     async makeMove(startSquare, endSquare) {
+      if (!this.game_id) {
+        console.error("No game_id available");
+        return null;
+      }
+      
       const response = await this.postResponse("/make-move", {
+        game_id: this.game_id,
         start: startSquare,
         end: endSquare,
       });
@@ -94,7 +114,13 @@ export const gameLogic = {
       }
     },
     async promotePawn(pawnLocation, promoteTo) {
+      if (!this.game_id) {
+        console.error("No game_id available");
+        return false;
+      }
+      
       const response = await this.postResponse("/promote-pawn", {
+        game_id: this.game_id,
         pawnLocation,
         promoteTo,
       });
