@@ -249,13 +249,16 @@ export default {
 
 .board-container {
   position: relative;
-  display: inline-block;
+  width: min(512px, calc(100vw - 100px));
+  max-width: 512px;
+  aspect-ratio: 1 / 1;
 }
 
 .timer-section {
   display: flex;
   justify-content: flex-end;
-  width: 512px; /* Same width as chessboard (8 * 64px) */
+  width: min(512px, calc(100vw - 100px));
+  max-width: 512px;
   padding-right: 0;
   margin: 0;
 }
@@ -264,7 +267,7 @@ export default {
   position: absolute;
   top: -85px; /* Position above the board */
   left: 0;
-  width: 512px; /* Same width as chessboard */
+  width: 100%;
   display: flex;
   justify-content: center; /* Center the popup */
   z-index: 100;

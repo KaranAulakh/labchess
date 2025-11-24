@@ -171,13 +171,16 @@ export default {
 <style scoped>
 .board-wrapper {
   position: relative;
-  display: inline-block;
+  width: 100%;
+  height: 100%;
 }
 
 .chessboard {
   display: grid;
-  grid-template-columns: repeat(8, 64px);
-  grid-template-rows: repeat(8, 64px);
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: 100%;
+  height: 100%;
 }
 
 .chess-square {
@@ -185,8 +188,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 64px;
-  height: 64px;
+  width: 100%;
+  height: 100%;
   cursor: pointer;
 }
 
@@ -217,8 +220,8 @@ export default {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 20px;
-  height: 20px;
+  width: 30%;
+  height: 30%;
   background-color: rgba(21, 52, 72, 0.4);
   border-radius: 50%;
   transform: translate(-50%, -50%);
@@ -231,7 +234,7 @@ export default {
   position: absolute;
   top: 50%;
   left: 50%;
-  font-size: 24px;
+  font-size: clamp(16px, 4vw, 24px);
   font-weight: bold;
   color: rgba(220, 53, 69, 0.8);
   transform: translate(-50%, -50%);
