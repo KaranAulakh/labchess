@@ -76,6 +76,21 @@ span {
   font-style: italic;
 }
 
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(-20px);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.15) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 @media (max-width: 768px) {
   .app-container {
     margin-left: 60px;

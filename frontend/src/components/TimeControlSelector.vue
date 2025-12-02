@@ -1,11 +1,5 @@
 <template>
   <div class="time-control-selector">
-    <div class="selector-header">
-      <div class="selector-icon">♟️</div>
-      <h2 class="selector-title">Welcome to Chess!</h2>
-      <p class="selector-message">Select your time control to begin!</p>
-    </div>
-
     <div class="time-categories">
       <TimeControlCategory
         v-for="category in timeControlCategories"
@@ -40,31 +34,15 @@ export default {
   text-align: center;
 }
 
-.selector-header {
-  margin-bottom: 12px;
-}
-
-.selector-icon {
-  font-size: 20px;
-  margin-bottom: 2px;
-}
-
-.selector-title {
-  font-size: 18px;
-  margin: 0 0 4px 0;
-  color: #ecf0f1;
-}
-
-.selector-message {
-  font-size: 14px;
-  margin: 0 0 4px 0;
-  color: #908f8f;
-}
-
 .time-categories {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 8px;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .time-categories {
+    gap: 6px;
+  }
 }
 </style>

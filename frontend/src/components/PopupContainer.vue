@@ -31,17 +31,6 @@ export default {
 </script>
 
 <style scoped>
-@keyframes popup-appear {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 .popup-overlay {
   position: absolute;
   top: 0;
@@ -61,10 +50,18 @@ export default {
   background: #2c3e50;
   border-radius: 12px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-  padding: 24px;
-  max-width: 320px;
+  padding: 30px;
+  max-width: 400px;
   width: 85%;
   text-align: center;
-  animation: popup-appear 0.3s ease-out;
+  animation: popIn 0.5s ease-out;
+}
+
+@media (max-width: 768px) {
+  .popup-container {
+    padding: 16px;
+    max-width: 240px;
+    width: 70%;
+  }
 }
 </style>
