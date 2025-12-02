@@ -1,9 +1,7 @@
 <template>
   <div class="game-end-notification">
     <div class="notification-header">
-      <div class="game-result-icon">{{ gameContent.icon }}</div>
       <h2 class="notification-title">{{ gameContent.title }}</h2>
-      <p class="notification-message">{{ gameContent.message }}</p>
     </div>
 
     <div v-if="winner" class="winner-info">
@@ -39,8 +37,6 @@ export default {
       return (
         GAME_STATE_CONTENT[this.gameState] || {
           title: "Game Over!",
-          icon: "⚖️",
-          message: "The game has ended!",
         }
       );
     },
@@ -57,21 +53,10 @@ export default {
   margin-bottom: 16px;
 }
 
-.game-result-icon {
-  font-size: 28px;
-  margin-bottom: 8px;
-}
-
 .notification-title {
   font-size: 20px;
   margin: 0 0 8px 0;
   color: #ecf0f1;
-}
-
-.notification-message {
-  font-size: 14px;
-  margin: 0;
-  color: #908f8f;
 }
 
 .winner-info {
@@ -83,5 +68,21 @@ export default {
 
 .notification-actions {
   margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .notification-title {
+    font-size: 18px;
+  }
+
+  .winner-info {
+    padding: 10px;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  .notification-actions {
+    margin-top: 12px;
+  }
 }
 </style>

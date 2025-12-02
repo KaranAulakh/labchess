@@ -67,4 +67,12 @@ export default {
   text-align: center;
   animation: popup-appear 0.3s ease-out;
 }
+
+@media (max-width: 768px) {
+  .popup-container {
+    padding: 16px;
+    max-width: 240px;
+    width: 70%;
+  }
+}
 </style>

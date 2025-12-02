@@ -18,15 +18,6 @@ CORS(app, resources={r"/*": {'origins': [
     'https://www.labchess.com'
 ]}})
 
-# todo - create a valuable home page
-@app.route('/', methods=['GET'])
-def test() -> str:
-  return ("Home page incoming")
-
-@app.route('/play', methods=['GET'])
-def play() -> str:
-  return ("Let's play chess")
-
 @app.route('/new-game', methods=['POST'])
 def new_game() -> Response:
     """Create a new game and return the game_id with start positions"""
