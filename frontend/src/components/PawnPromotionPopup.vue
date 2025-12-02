@@ -73,19 +73,8 @@ export default {
   border-radius: 8px;
   padding: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-  animation: slideDown 0.3s ease-out;
+  animation: popIn 0.5s ease-out;
   display: inline-block;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .piece-selection {
