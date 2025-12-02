@@ -91,10 +91,6 @@ span {
   }
 }
 
-.animate-pop-in {
-  animation: popIn 0.5s ease-out;
-}
-
 @media (max-width: 768px) {
   .app-container {
     margin-left: 60px;
