@@ -85,10 +85,10 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10px 16px;
+  padding: 12px 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  min-width: 120px;
+  min-width: 150px;
   margin: 0;
 }
 
@@ -110,8 +110,12 @@ export default {
 }
 
 .timer-display {
-  font-size: 24px;
+  font-size: 30px;
   margin-bottom: 4px;
+}
+
+.player-label {
+  font-size: 14px;
 }
 
 @keyframes pulse-glow {

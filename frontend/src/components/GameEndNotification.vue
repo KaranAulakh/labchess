@@ -50,27 +50,32 @@ export default {
 }
 
 .notification-header {
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 .notification-title {
-  font-size: 20px;
-  margin: 0 0 8px 0;
+  font-size: 24px;
+  margin: 0 0 10px 0;
   color: #ecf0f1;
 }
 
 .winner-info {
   background: #22313f;
   border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 16px;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 16px;
 }
 
 .notification-actions {
-  margin-top: 16px;
+  margin-top: 20px;
 }
 
 @media (max-width: 768px) {
+  .notification-header {
+    margin-bottom: 16px;
+  }
+
   .notification-title {
     font-size: 18px;
   }

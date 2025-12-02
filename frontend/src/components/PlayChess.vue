@@ -232,7 +232,6 @@ export default {
 </script>
 
 <style scoped>
-/* Override the global app-container spacing */
 .app-container {
   justify-content: center !important;
   align-items: center !important;
@@ -245,31 +244,42 @@ export default {
   flex-direction: column;
   align-items: center;
   gap: 0;
+  --board-size: min(
+    clamp(280px, calc(100vw - 280px), 640px),
+    clamp(280px, calc(100vh - 200px), 640px)
+  );
 }
 
 .board-container {
   position: relative;
-  width: min(512px, calc(100vw - 100px));
-  max-width: 512px;
+  width: var(--board-size);
   aspect-ratio: 1 / 1;
 }
 
 .timer-section {
   display: flex;
   justify-content: flex-end;
-  width: min(512px, calc(100vw - 100px));
-  max-width: 512px;
+  width: var(--board-size);
   padding-right: 0;
   margin: 0;
 }
 
 .promotion-popup-wrapper {
   position: absolute;
-  top: -85px; /* Position above the board */
+  top: clamp(-70px, -15%, -100px);
   left: 0;
   width: 100%;
   display: flex;
-  justify-content: center; /* Center the popup */
+  justify-content: center;
   z-index: 100;
+}
+
+@media (max-width: 768px) {
+  .game-container {
+    --board-size: min(
+      clamp(250px, calc(100vw - 140px), 640px),
+      clamp(250px, calc(100vh - 180px), 640px)
+    );
+  }
 }
 </style>

@@ -37,6 +37,12 @@ export default {
 .time-categories {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .time-categories {
+    gap: 6px;
+  }
 }
 </style>

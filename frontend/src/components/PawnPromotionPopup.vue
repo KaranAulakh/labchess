@@ -71,7 +71,7 @@ export default {
   background: rgba(44, 62, 80, 0.98);
   border: 2px solid #4a6741;
   border-radius: 8px;
-  padding: 8px;
+  padding: 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
   animation: popIn 0.5s ease-out;
   display: inline-block;
@@ -79,7 +79,7 @@ export default {
 
 .piece-selection {
   display: flex;
-  gap: 6px;
+  gap: 8px;
 }
 
 .piece-option {
@@ -89,11 +89,11 @@ export default {
   background: #34495e;
   border: 2px solid transparent;
   border-radius: 6px;
-  padding: 6px;
+  padding: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  width: 44px;
-  height: 44px;
+  width: 55px;
+  height: 55px;
 }
 
 .piece-option:hover {
@@ -103,8 +103,29 @@ export default {
 }
 
 .piece-image {
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .promotion-popup {
+    padding: 8px;
+  }
+
+  .piece-selection {
+    gap: 6px;
+  }
+
+  .piece-option {
+    padding: 6px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .piece-image {
+    width: 32px;
+    height: 32px;
+  }
 }
 </style>

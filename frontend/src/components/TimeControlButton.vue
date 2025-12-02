@@ -26,9 +26,9 @@ export default {
   background: #34495e;
   border: 2px solid #4a6741;
   color: #ecf0f1;
-  padding: 4px 8px;
-  font-size: 12px;
-  min-width: 45px;
+  padding: 6px 10px;
+  font-size: 14px;
+  min-width: 52px;
   font-family: "Courier New", monospace;
 }
 
@@ -40,5 +40,13 @@ export default {
 
 .btn-time-control:active {
   box-shadow: 0 2px 8px rgba(74, 103, 65, 0.3);
+}
+
+@media (max-width: 768px) {
+  .btn-time-control {
+    padding: 4px 8px;
+    font-size: 12px;
+    min-width: 45px;
+  }
 }
 </style>

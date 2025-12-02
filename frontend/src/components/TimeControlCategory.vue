@@ -41,12 +41,12 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3px;
+  gap: 4px;
 }
 
 .category-title {
   color: #ecf0f1;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   margin: 0;
   text-align: center;
@@ -54,8 +54,22 @@ export default {
 
 .time-options {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   justify-content: center;
   flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .time-category {
+    gap: 3px;
+  }
+
+  .category-title {
+    font-size: 12px;
+  }
+
+  .time-options {
+    gap: 6px;
+  }
 }
 </style>

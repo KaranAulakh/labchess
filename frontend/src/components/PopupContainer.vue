@@ -50,8 +50,8 @@ export default {
   background: #2c3e50;
   border-radius: 12px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-  padding: 24px;
-  max-width: 320px;
+  padding: 30px;
+  max-width: 400px;
   width: 85%;
   text-align: center;
   animation: popIn 0.5s ease-out;
