@@ -42,7 +42,6 @@ export default {
   width: 200px;
   background-color: #22313f;
   color: #908f8f;
-  transition: width 0.3s ease;
   flex-shrink: 0;
 }
 
@@ -54,16 +53,12 @@ export default {
 
 .sidebar ul {
   list-style-type: none;
-  width: 100%;
   padding: 0;
 }
 
 .sidebar li {
-  color: #908f8f;
-  text-align: left;
   padding: 15px 20px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -73,26 +68,27 @@ export default {
   background-color: #2c3e50;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .sidebar {
-    width: 60px;
-    position: fixed;
-    z-index: 1000;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-    min-height: 100vh;
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .sidebar h1 {
     display: none;
   }
 
-  .sidebar li {
-    padding: 15px 10px;
-    justify-content: center;
+  .sidebar ul {
+    display: flex;
+    gap: 20px;
+    margin: 0;
   }
 
-  .sidebar :deep(.nav-text) {
-    display: none;
+  .sidebar li {
+    padding: 10px 15px;
   }
 }
 </style>

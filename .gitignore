@@ -11,7 +11,6 @@ frontend/.env.*.local
 frontend/.env.production
 frontend/.env.development
 frontend/node_modules
-frontend/public
 
 # Editor directories and files
 .idea

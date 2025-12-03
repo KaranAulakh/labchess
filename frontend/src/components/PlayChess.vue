@@ -234,39 +234,34 @@ export default {
 <style scoped>
 .app-container {
   justify-content: center !important;
-  align-items: center !important;
-  gap: 0;
-  padding: 20px;
 }
 
 .game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0;
-  --board-size: min(
-    clamp(280px, calc(100vw - 280px), 640px),
-    clamp(280px, calc(100vh - 200px), 640px)
-  );
+  width: 100%;
+  --board-size: min(100%, calc(100vh - 200px), 640px);
+}
+
+.board-container,
+.timer-section {
+  width: var(--board-size);
 }
 
 .board-container {
   position: relative;
-  width: var(--board-size);
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1;
 }
 
 .timer-section {
   display: flex;
   justify-content: flex-end;
-  width: var(--board-size);
-  padding-right: 0;
-  margin: 0;
 }
 
 .promotion-popup-wrapper {
   position: absolute;
-  top: clamp(-70px, -15%, -100px);
+  top: -70px;
   left: 0;
   width: 100%;
   display: flex;
@@ -274,12 +269,9 @@ export default {
   z-index: 100;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .game-container {
-    --board-size: min(
-      clamp(250px, calc(100vw - 140px), 640px),
-      clamp(250px, calc(100vh - 180px), 640px)
-    );
+    --board-size: min(100%, calc(100vh - 180px));
   }
 }
 </style>
