@@ -1,5 +1,5 @@
 <template>
-  <div class="flex">
+  <div class="main-layout">
     <SideBar />
     <router-view class="app-container" />
   </div>
@@ -15,3 +15,17 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.main-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: #2c3e50;
+}
+
+@media (max-width: 600px) {
+  .main-layout {
+    flex-direction: column;
+  }
+}
+</style>
