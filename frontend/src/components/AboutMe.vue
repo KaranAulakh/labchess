@@ -10,7 +10,8 @@
           rel="noopener"
           class="link-btn linkedin"
         >
-          <span class="icon">in</span> LinkedIn
+          <img src="@/assets/icons/linkedin.svg" class="icon" alt="" />
+          LinkedIn
         </a>
         <a
           href="https://github.com/KaranAulakh"
@@ -18,13 +19,16 @@
           rel="noopener"
           class="link-btn github"
         >
-          <span class="icon">⌘</span> GitHub
+          <img src="@/assets/icons/github.svg" class="icon" alt="" />
+          GitHub
         </a>
         <a href="mailto:karansaulakh@gmail.com" class="link-btn email">
-          <span class="icon">✉</span> Email
+          <img src="@/assets/icons/email.svg" class="icon" alt="" />
+          Email
         </a>
         <a href="/resume.pdf" target="_blank" class="link-btn resume">
-          <span class="icon">↓</span> Resume
+          <img src="@/assets/icons/download.svg" class="icon" alt="" />
+          Resume
         </a>
       </div>
     </section>
@@ -97,6 +101,8 @@ export default {
 }
 
 .link-btn .icon {
+  width: 18px;
+  height: 18px;
   font-weight: 700;
 }
 
@@ -128,14 +134,12 @@ export default {
 }
 
 .link-btn.resume {
-  background: transparent;
-  border: 2px solid #ff9800;
-  color: #ff9800;
+  background: #ff9800;
+  color: #fff;
 }
 
 .link-btn.resume:hover {
-  background: #ff9800;
-  color: #fff;
+  background: #e68a00;
 }
 
 /* Content Section overrides for this page */
