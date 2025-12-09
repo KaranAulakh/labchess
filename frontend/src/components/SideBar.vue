@@ -11,6 +11,11 @@
         <span class="nav-text">Play</span>
       </li>
     </ul>
+    <div class="sidebar-footer">
+      <span class="built-by" @click="navigateTo('/karanaulakh')">
+        Built by Karan Aulakh
+      </span>
+    </div>
   </div>
 </template>
 
@@ -43,6 +48,12 @@ export default {
   background-color: #22313f;
   color: #908f8f;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
 }
 
 .sidebar h1 {
@@ -75,6 +86,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
 
   .sidebar h1 {
@@ -90,5 +104,19 @@ export default {
   .sidebar li {
     padding: 10px 15px;
   }
+
+  .sidebar-footer {
+    display: none;
+  }
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding: 15px 20px;
+  border-top: 1px solid rgba(144, 143, 143, 0.15);
+}
+
+.built-by {
+  font-size: 0.75rem; /* Slightly smaller than global default */
 }
 </style>

@@ -3,9 +3,6 @@
     <!-- Hero Section -->
     <section class="page-header">
       <h1>Karan Aulakh</h1>
-      <p class="tagline">
-        Software Engineer · Distributed Systems · Full Stack
-      </p>
       <div class="hero-links">
         <a
           href="https://www.linkedin.com/in/karan-aulakh/"
@@ -66,7 +63,7 @@
 
 <script>
 export default {
-  name: "AboutDeveloper",
+  name: "AboutMe",
 };
 </script>
 
@@ -148,15 +145,7 @@ export default {
 }
 
 .content-section h2 {
-  margin: 0 0 15px 0;
   font-size: 1.3rem;
-}
-
-.content-section p {
-  color: #d0d0d0;
-  line-height: 1.8;
-  margin: 0;
-  text-align: left;
 }
 
 /* CTA Container */
@@ -171,12 +160,18 @@ export default {
   }
 
   .hero-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .link-btn {
-    padding: 8px 14px;
+    padding: 10px 14px;
     font-size: 0.9rem;
+    justify-content: center;
   }
 
   .content-section {
