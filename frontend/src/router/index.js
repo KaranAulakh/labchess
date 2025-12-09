@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "@/components/HomeView.vue";
 import PlayChess from "@/components/PlayChess.vue";
-import AboutDeveloper from "@/components/AboutDeveloper.vue";
+import AboutMe from "@/components/AboutMe.vue";
 
 const routes = [
   {
@@ -16,8 +16,8 @@ const routes = [
   },
   {
     path: "/karanaulakh",
-    name: "aboutDeveloper",
-    component: AboutDeveloper,
+    name: "aboutMe",
+    component: AboutMe,
   },
 ];
 

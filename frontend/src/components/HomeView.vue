@@ -43,6 +43,12 @@
         </ul>
       </section>
     </div>
+
+    <footer class="mobile-footer">
+      <router-link to="/karanaulakh" class="built-by">
+        Built by Karan Aulakh
+      </router-link>
+    </footer>
   </div>
 </template>
 
@@ -95,6 +101,19 @@ export default {
 
   .content-section {
     padding: 20px;
+  }
+}
+
+/* Mobile-only footer */
+.mobile-footer {
+  display: none;
+  text-align: center;
+  padding: 20px 0 10px 0;
+}
+
+@media (max-width: 600px) {
+  .mobile-footer {
+    display: block;
   }
 }
 </style>
