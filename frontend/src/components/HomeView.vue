@@ -58,42 +58,9 @@ export default {
   padding: 30px 40px;
 }
 
+/* Override global content-section for HomeView specific spacing */
 .content-section {
   margin-bottom: 30px;
-  padding: 25px;
-  background-color: rgba(34, 49, 63, 0.5);
-  border-radius: 12px;
-  border-left: 4px solid #4caf50;
-}
-
-.content-section h2 {
-  margin: 0 0 15px 0;
-  color: #4caf50;
-}
-
-.accent-orange {
-  border-left-color: #ff9800;
-}
-
-.accent-orange h2 {
-  color: #ff9800;
-}
-
-.feature-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  text-align: left;
-}
-
-.feature-list li {
-  padding: 10px 0;
-  color: #d0d0d0;
-  border-bottom: 1px solid rgba(144, 143, 143, 0.2);
-}
-
-.feature-list li:last-child {
-  border-bottom: none;
 }
 
 .sub-list {
