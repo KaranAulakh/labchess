@@ -119,10 +119,15 @@ span {
 /* Built-by link (used in sidebar and mobile footer) */
 .built-by {
   font-size: 0.8rem;
-  color: #4caf50;
+  color: #6b7280;
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.built-by:hover {
+  color: #4caf50;
 }
 
 .content-section.accent-orange {

@@ -111,6 +111,10 @@ export default {
   padding: 20px 0 10px 0;
 }
 
+.mobile-footer .built-by {
+  color: #4caf50;
+}
+
 @media (max-width: 600px) {
   .mobile-footer {
     display: block;

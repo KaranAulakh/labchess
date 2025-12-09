@@ -50,6 +50,10 @@ export default {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
 }
 
 .sidebar h1 {
@@ -82,6 +86,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
   }
 
   .sidebar h1 {
