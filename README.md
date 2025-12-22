@@ -38,5 +38,6 @@ export NVM_DIR="$HOME/.nvm"
 - ```npm init -y```
 
 To run the Server
-- ```npm run install```
+- ```npm install```
 - ```npm run serve```
+
