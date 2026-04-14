@@ -9,6 +9,7 @@ The app supports standard chess rules, including legal move validation, game sta
 ## Running the Backend Server
 Perform these steps if running for the first time
 - Make sure you have python3 and pipenv installed
+- Navigate to project root
 - Create a virtual enviornment (alternatively you can use homebrew to install system-wide)
   - ```python3 -m venv venv```
 - Activate the virtual enviornment
@@ -18,7 +19,7 @@ Perform these steps if running for the first time
   - ```pip install -r backend/requirements.txt```
 
 To run the Backend Server
-- Make sure virtual enviornment if you are using one. You may also install all of the above system wide
+- Make sure virtual enviornment is running if you are using one. Go to project Root and run  
 - ```python3 backend/src/main.py```
 
 
@@ -33,6 +34,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 ```
 - Restart your terminal
+- navigate to frontend folder
 - ```nvm install --lts```
 - ```nvm use --lts```
 - ```npm init -y```
